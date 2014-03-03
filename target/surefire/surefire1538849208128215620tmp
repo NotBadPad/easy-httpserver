@@ -1,0 +1,23 @@
+#surefire
+#Mon Mar 03 16:20:37 CST 2014
+testClassesDirectory=E\:\\mywork\\easy-httpserver\\target\\test-classes
+forkMode=once
+classPathUrl.2=C\:\\Users\\sonight\\.m2\\repository\\junit\\junit\\3.8.1\\junit-3.8.1.jar
+useManifestOnlyJar=true
+classPathUrl.1=E\:\\mywork\\easy-httpserver\\target\\classes
+classPathUrl.0=E\:\\mywork\\easy-httpserver\\target\\test-classes
+reportsDirectory=E\:\\mywork\\easy-httpserver\\target\\surefire-reports
+providerConfiguration=org.apache.maven.surefire.junit.JUnit3Provider
+testSuiteDefinitionTestSourceDirectory=E\:\\mywork\\easy-httpserver\\src\\test\\java
+surefireClassPathUrl.1=C\:\\Users\\sonight\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-api\\2.10\\surefire-api-2.10.jar
+surefireClassPathUrl.0=C\:\\Users\\sonight\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-junit3\\2.10\\surefire-junit3-2.10.jar
+runOrder=filesystem
+useSystemClassLoader=true
+excludes0=**/*$*
+isTrimStackTrace=true
+enableAssertions=true
+includes2=**/*TestCase.java
+failIfNoTests=false
+includes1=**/*Test.java
+includes0=**/Test*.java
+childDelegation=false
