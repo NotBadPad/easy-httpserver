@@ -1,6 +1,5 @@
 package org.eh.core.util;
 
-import org.eh.core.common.Constants;
 import org.junit.Test;
 
 /**
@@ -18,6 +17,5 @@ public class PropertyUtilTest {
 
 	@Test
 	public void testReflect() {
-		Constants.loadFromProp();
 	}
 }

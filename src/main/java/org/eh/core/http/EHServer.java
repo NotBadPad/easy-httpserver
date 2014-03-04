@@ -20,7 +20,8 @@ public class EHServer {
 	public void startServer() throws IOException {
 		System.out.println("starting EHServer......");
 		// 加载配置文件
-		Constants.loadFromProp();
+		String propPath = this.getClass().getResource("/").getPath() + Constants.PROPERTIES_NAME;
+		Constants.loadFromProp(propPath);
 
 		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();

@@ -17,14 +17,16 @@ public class Constants {
 
 	public static Map<String, String> UrlClassMap = new HashMap<String, String>(); // url与class映射
 
-	public static void loadFromProp() {
-		String path = ClassLoader.getSystemResource("").getPath();
-		Map<String, String> map = PropertyUtil.analysisProperties(path.replace("file:\\", "")
-				+ Constants.PROPERTIES_NAME);
+	public static void loadFromProp(String path) {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			map = PropertyUtil.analysisProperties(path);
+		} catch (Exception e) {
+			System.out.println("配置文件不存在！");
+		}
+
 		for (String key : map.keySet()) {
 			if (key.equals("PACKAGE_PREFIX")) {
-				PACKAGE_PREFIX = map.get(key).toString();
-			} else if (key.equals("PACKAGE_PREFIX")) {
 				PACKAGE_PREFIX = map.get(key).toString();
 			} else if (key.equals("VIEW_BASE_PATH")) {
 				VIEW_BASE_PATH = map.get(key).toString();

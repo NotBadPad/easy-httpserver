@@ -3,6 +3,7 @@ package org.eh.core.http;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,7 +134,7 @@ public class EHHttpHandler implements HttpHandler {
 
 		for (String kv : query.split("&")) {
 			String[] temp = kv.split("=");
-			map.put(temp[0], temp[1]);
+			map.put(temp[0], URLDecoder.decode(temp[1]));
 		}
 		return map;
 	}
