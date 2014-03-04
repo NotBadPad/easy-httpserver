@@ -17,8 +17,8 @@ public class TestController implements Controller {
 	public ResultInfo process(Map<String, Object> parms) {
 		ResultInfo resultInfo = new ResultInfo();
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("name", "guojing");
-		map.put("msg", "Hello!");
+		map.put("name", parms.get("name"));
+		map.put("msg", parms.get("msg"));
 
 		resultInfo.setResultMap(map);
 		resultInfo.setView("test/myinfo");

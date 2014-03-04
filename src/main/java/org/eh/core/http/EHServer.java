@@ -19,6 +19,10 @@ public class EHServer {
 	@SuppressWarnings("restriction")
 	public void startServer() throws IOException {
 		System.out.println("starting EHServer......");
+		// 加载配置文件
+		Constants.loadFromProp();
+
+		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();
 		HttpServer httpserver = provider.createHttpServer(new InetSocketAddress(port), 100);
 		httpserver.createContext("/", new EHHttpHandler());
@@ -28,7 +32,6 @@ public class EHServer {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Constants.UrlClassMap.put("/test/list", "org.eh.web.controller.TestController");
 		new EHServer().startServer();
 	}
 }

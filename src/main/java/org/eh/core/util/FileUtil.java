@@ -32,6 +32,7 @@ public class FileUtil {
 				i = c.read(bc);
 			}
 			c.close();
+			fis.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

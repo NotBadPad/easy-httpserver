@@ -2,9 +2,13 @@ package org.eh.core.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
+import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
 import org.eh.core.web.controller.Controller;
 import org.eh.core.web.view.ViewHandler;
@@ -30,7 +34,7 @@ public class EHHttpHandler implements HttpHandler {
 
 			// 返回404
 			if (resultInfo == null || StringUtil.isEmpty(resultInfo.getView())) {
-				responseToClient(httpExchange, 404, null);
+				responseToClient(httpExchange, 200, "<h1>页面不存在<h1>");
 				return;
 			}
 
@@ -50,6 +54,7 @@ public class EHHttpHandler implements HttpHandler {
 			}
 
 		} catch (Exception e) {
+			httpExchange.close();
 			e.printStackTrace();
 		}
 	}
@@ -70,17 +75,23 @@ public class EHHttpHandler implements HttpHandler {
 			OutputStream out = httpExchange.getResponseBody();
 			out.write(bytes);
 			out.flush();
+			httpExchange.close();
 		}
 			break;
 		case 302: { // 跳转
 			Headers headers = httpExchange.getResponseHeaders();
 			headers.add("Location", msg);
 			httpExchange.sendResponseHeaders(code, 0);
+			httpExchange.close();
 		}
 			break;
 		case 404: { // 错误
-			byte[] bytes = msg.getBytes();
+			byte[] bytes = "".getBytes();
 			httpExchange.sendResponseHeaders(code, bytes.length);
+			OutputStream out = httpExchange.getResponseBody();
+			out.write(bytes);
+			out.flush();
+			httpExchange.close();
 		}
 			break;
 		default:
@@ -99,13 +110,31 @@ public class EHHttpHandler implements HttpHandler {
 		Class controllerClass = Class.forName(classPath);
 		Controller controller = (Controller) controllerClass.newInstance();
 
-		// 解析参数
-
-		return controller.process(null);
+		return controller.process(analysisParms(httpExchange));
 	}
 
 	private String invokViewHandler(ResultInfo resultInfo) {
 		ViewHandler viewHandler = new ViewHandler();
 		return viewHandler.processView(resultInfo);
+	}
+
+	private Map<String, Object> analysisParms(HttpExchange httpExchange) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		URI requestedUri = httpExchange.getRequestURI();
+		String queryGet = requestedUri.getRawQuery();
+		String queryPost = IOUtil.getRequestContent(httpExchange.getRequestBody());
+		String query = "";
+		if (!StringUtil.isEmpty(queryGet)) {
+			query = queryGet;
+		}
+		if (!StringUtil.isEmpty(queryPost)) {
+			query = query + "&" + queryPost;
+		}
+
+		for (String kv : query.split("&")) {
+			String[] temp = kv.split("=");
+			map.put(temp[0], temp[1]);
+		}
+		return map;
 	}
 }

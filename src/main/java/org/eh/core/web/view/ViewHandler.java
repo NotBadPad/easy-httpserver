@@ -3,6 +3,7 @@ package org.eh.core.web.view;
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.FileUtil;
+import org.eh.core.util.StringUtil;
 
 /**
  * 处理页面信息
@@ -18,10 +19,16 @@ public class ViewHandler {
 		if (FileUtil.isExist(path)) {
 			content = FileUtil.readFile(path);
 		}
+		if (StringUtil.isEmpty(content)) {
+			return "";
+		}
 
 		for (String key : resultInfo.getResultMap().keySet()) {
-			content = content.replaceAll("\\$\\{" + key + "\\}", resultInfo.getResultMap().get(key)
-					.toString());
+			String temp = "";
+			if (null != resultInfo.getResultMap().get(key)) {
+				temp = resultInfo.getResultMap().get(key).toString();
+			}
+			content = content.replaceAll("\\$\\{" + key + "\\}", temp);
 		}
 
 		return content;
