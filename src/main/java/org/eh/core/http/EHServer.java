@@ -3,6 +3,8 @@ package org.eh.core.http;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import org.eh.core.common.Constants;
+
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
 
@@ -26,6 +28,7 @@ public class EHServer {
 	}
 
 	public static void main(String[] args) throws IOException {
+		Constants.UrlClassMap.put("/test/list", "org.eh.web.controller.TestController");
 		new EHServer().startServer();
 	}
 }

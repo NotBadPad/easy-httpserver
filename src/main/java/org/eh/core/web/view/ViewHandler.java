@@ -20,14 +20,14 @@ public class ViewHandler {
 		}
 
 		for (String key : resultInfo.getResultMap().keySet()) {
-			content = content.replaceAll("${" + key + "}", resultInfo.getResultMap().get(key)
+			content = content.replaceAll("\\$\\{" + key + "\\}", resultInfo.getResultMap().get(key)
 					.toString());
 		}
 
 		return content;
 	}
 
-	public String analysisViewPath(String viewPath) {
+	private String analysisViewPath(String viewPath) {
 		String path = this.getClass().getResource("/").getPath() + Constants.VIEW_BASE_PATH
 				+ viewPath + ".page";
 		return path;

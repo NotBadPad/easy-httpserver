@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eh.core.common.Constants;
+import org.eh.core.model.ResultInfo;
+import org.eh.core.util.StringUtil;
+import org.eh.core.web.controller.Controller;
+import org.eh.core.web.view.ViewHandler;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -22,10 +26,29 @@ public class EHHttpHandler implements HttpHandler {
 			String path = httpExchange.getRequestURI().getPath();
 			System.out.println("Request path:" + path);
 			// 调用对应处理程序controller
-			invokController(httpExchange);
-			// 调用ViewHandler处理页面
+			ResultInfo resultInfo = invokController(httpExchange);
 
-			responseToClient(httpExchange, 200, "<h1>aaaaaaa</h1>");
+			// 返回404
+			if (resultInfo == null || StringUtil.isEmpty(resultInfo.getView())) {
+				responseToClient(httpExchange, 404, null);
+				return;
+			}
+
+			String viewPath = resultInfo.getView();
+			// 重定向
+			if (viewPath.startsWith("redirect:")) {
+				String redirectUrl = viewPath.replace("redirect:", "");
+				responseToClient(httpExchange, 302, redirectUrl);
+				return;
+			} else { // 解析对应view并返回
+				String content = invokViewHandler(resultInfo);
+				if (content == null) {
+					content = "";
+				}
+				responseToClient(httpExchange, 200, content);
+				return;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,17 +78,34 @@ public class EHHttpHandler implements HttpHandler {
 			httpExchange.sendResponseHeaders(code, 0);
 		}
 			break;
+		case 404: { // 错误
+			byte[] bytes = msg.getBytes();
+			httpExchange.sendResponseHeaders(code, bytes.length);
+		}
+			break;
 		default:
 			break;
 		}
 	}
 
-	private void invokController(HttpExchange httpExchange) {
+	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
 		String path = httpExchange.getRequestURI().getPath();
-		// 将url路径转为包路径
-		String packagePrefix = Constants.PACKAGE_PREFIX
-				+ path.substring(0, path.lastIndexOf("/")).replace("/", ".");
-		System.out.println(packagePrefix);
-		// Class controllerClass = Class.forName("")
+		
+		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf(".")));
+		if (classPath == null || classPath.length() == 0) {
+			return null;
+		}
+		Class controllerClass = Class.forName(classPath);
+		Controller controller = (Controller) controllerClass.newInstance();
+
+		// 解析参数
+
+		return controller.process(null);
+	}
+
+	private String invokViewHandler(ResultInfo resultInfo) {
+		ViewHandler viewHandler = new ViewHandler();
+		return viewHandler.processView(resultInfo);
 	}
 }

@@ -14,7 +14,7 @@ public class FileUtil {
 	
 	public static boolean isExist(String path) {
 		File file = new File(path);
-		return isExist(path);
+		return file.exists();
 	}
 
 	@SuppressWarnings("resource")
@@ -27,7 +27,7 @@ public class FileUtil {
 			ByteBuffer bc = ByteBuffer.allocate(1024);
 			int i = c.read(bc);
 			while (i != -1) {
-				sb.append(bc.toString());
+				sb.append(new String(bc.array()));
 				bc.clear();
 				i = c.read(bc);
 			}
