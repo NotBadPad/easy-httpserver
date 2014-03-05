@@ -16,4 +16,5 @@ public class FileUtilTest {
 		String content = FileUtil.readFile(path);
 		System.out.println(content);
 	}
+
 }

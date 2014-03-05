@@ -3,6 +3,7 @@ package org.eh.core.http;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import org.eh.core.annotation.AnnocationHandler;
 import org.eh.core.common.Constants;
 
 import com.sun.net.httpserver.HttpServer;
@@ -18,10 +19,27 @@ public class EHServer {
 
 	@SuppressWarnings("restriction")
 	public void startServer() throws IOException {
-		System.out.println("starting EHServer......");
+		System.out.println("Starting EHServer......");
+		System.out.println("Loading configuration......");
 		// 加载配置文件
 		String propPath = this.getClass().getResource("/").getPath() + Constants.PROPERTIES_NAME;
 		Constants.loadFromProp(propPath);
+
+		// 加载注解配置的controller
+		if (Constants.OTHER_CONFIG_INFO.get(Constants.PROPERTIES_CONTROLLER_PACKAGE) != null) {
+			AnnocationHandler annocationHandler = new AnnocationHandler();
+			try {
+				annocationHandler.paserControllerAnnocation(Constants.OTHER_CONFIG_INFO.get(
+						Constants.PROPERTIES_CONTROLLER_PACKAGE).toString());
+			} catch (Exception e) {
+				System.err.println("加载controller配置出错！");
+				e.printStackTrace();
+			}
+		}
+
+		for (String key : Constants.UrlClassMap.keySet()) {
+			System.out.println(key);
+		}
 
 		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();
