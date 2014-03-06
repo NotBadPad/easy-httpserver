@@ -38,6 +38,7 @@ public class ViewHandler {
 		String path = this.getClass().getResource("/").getPath()
 				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
 				+ viewPath + ".page";
+		System.out.println(path);
 		return path;
 	}
 }

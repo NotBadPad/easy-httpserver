@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
+import org.eh.core.util.FileUtil;
 import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
 import org.eh.core.web.controller.Controller;
@@ -30,6 +34,17 @@ public class EHHttpHandler implements HttpHandler {
 		try {
 			String path = httpExchange.getRequestURI().getPath();
 			System.out.println("Request path:" + path);
+
+			// 根据后缀判断是否是静态资源
+			String suffix = path.substring(path.lastIndexOf("."), path.length());
+			List<String> suffixs =new ArrayList<>(Arrays.asList(".css",".js",".jpg",".png",".gif"));
+			if (suffixs.contains(suffix)) {
+				byte[] bytes = FileUtil.readFileByBytes(this.getClass().getResource("/").getPath()
+						+ "static" + path);
+				responseStaticToClient(httpExchange, 200, bytes);
+				return;
+			}
+
 			// 调用对应处理程序controller
 			ResultInfo resultInfo = invokController(httpExchange);
 
@@ -98,6 +113,22 @@ public class EHHttpHandler implements HttpHandler {
 		default:
 			break;
 		}
+	}
+	
+	/**
+	 * 响应请求，返回静态资源
+	 * @param httpExchange
+	 * @param code
+	 * @param bytes
+	 * @throws IOException
+	 */
+	private void responseStaticToClient(HttpExchange httpExchange, Integer code, byte[] bytes)
+			throws IOException {
+		httpExchange.sendResponseHeaders(code, bytes.length);
+		OutputStream out = httpExchange.getResponseBody();
+		out.write(bytes);
+		out.flush();
+		httpExchange.close();
 	}
 
 	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,

@@ -19,6 +19,10 @@ public class FileUtil {
 
 	@SuppressWarnings("resource")
 	public static String readFile(String path) {
+		System.out.println(path);
+		if (!isExist(path)) {
+			return "";
+		}
 		FileInputStream fis = null;
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -37,5 +41,28 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 		return sb.toString();
+	}
+
+	public static byte[] readFileByBytes(String path) {
+		System.out.println(path);
+		if (!isExist(path)) {
+			return "".getBytes();
+		}
+		byte[] bytes = null;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(path);
+			FileChannel c = fis.getChannel();
+			ByteBuffer bc = ByteBuffer.allocate((int) c.size());
+			int i = c.read(bc);
+			if (i != -1) {
+				bytes = bc.array();
+			}
+			c.close();
+			fis.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bytes;
 	}
 }
