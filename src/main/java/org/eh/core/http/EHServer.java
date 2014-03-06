@@ -38,7 +38,7 @@ public class EHServer {
 		}
 
 		for (String key : Constants.UrlClassMap.keySet()) {
-			System.out.println(key);
+			System.out.println("Add url-class:" + key + "  " + Constants.UrlClassMap.get(key));
 		}
 
 		// 启动服务器

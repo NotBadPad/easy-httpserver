@@ -35,7 +35,8 @@ public class ViewHandler {
 	}
 
 	private String analysisViewPath(String viewPath) {
-		String path = this.getClass().getResource("/").getPath() + Constants.VIEW_BASE_PATH
+		String path = this.getClass().getResource("/").getPath()
+				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
 				+ viewPath + ".page";
 		return path;
 	}
