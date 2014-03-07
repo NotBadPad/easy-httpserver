@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eh.core.common.Constants;
+import org.eh.core.common.ReturnType;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.FileUtil;
 import org.eh.core.util.IOUtil;
@@ -55,9 +56,13 @@ public class EHHttpHandler implements HttpHandler {
 
 			String viewPath = resultInfo.getView();
 			// 重定向
-			if (viewPath.startsWith("redirect:")) {
-				String redirectUrl = viewPath.replace("redirect:", "");
+			if (viewPath.startsWith(ReturnType.redirect.name())) {
+				String redirectUrl = viewPath.replace(ReturnType.redirect.name() + ":", "");
 				responseToClient(httpExchange, 302, redirectUrl);
+				return;
+			} else if (viewPath.startsWith(ReturnType.json.name())) {
+				String jsonContent = viewPath.replace(ReturnType.json.name() + ":", "");
+				responseToClient(httpExchange, 200, jsonContent);
 				return;
 			} else { // 解析对应view并返回
 				String content = invokViewHandler(resultInfo);

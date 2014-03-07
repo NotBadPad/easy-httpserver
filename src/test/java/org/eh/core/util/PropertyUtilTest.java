@@ -1,5 +1,6 @@
 package org.eh.core.util;
 
+import org.eh.core.common.ReturnType;
 import org.junit.Test;
 
 /**
@@ -17,5 +18,6 @@ public class PropertyUtilTest {
 
 	@Test
 	public void testReflect() {
+		System.out.println(ReturnType.redirect.name());
 	}
 }
