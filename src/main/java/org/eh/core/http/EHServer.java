@@ -15,12 +15,12 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
  * @date 2014-3-3
  */
 public class EHServer {
-	private final static int port = 9999;
 
 	@SuppressWarnings("restriction")
 	public void startServer() throws IOException {
 		System.out.println("Starting EHServer......");
 		System.out.println("Loading configuration......");
+
 		// 加载配置文件
 		String propPath = this.getClass().getResource("/").getPath() + Constants.PROPERTIES_NAME;
 		Constants.loadFromProp(propPath);
@@ -34,6 +34,7 @@ public class EHServer {
 			} catch (Exception e) {
 				System.err.println("加载controller配置出错！");
 				e.printStackTrace();
+				return;
 			}
 		}
 
@@ -41,6 +42,19 @@ public class EHServer {
 			System.out.println("Add url-class:" + key + "  " + Constants.UrlClassMap.get(key));
 		}
 
+		int port = 8899;
+		//设置端口号
+		String portValue = Constants.OTHER_CONFIG_INFO.get(Constants.PROPERTIES_HPPTSERVER_PORT);
+		if (portValue != null) {
+			try {
+				port = Integer.parseInt(portValue);
+			} catch (Exception e) {
+				System.err.println("端口错误！");
+				return;
+			}
+			
+		}
+		
 		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();
 		HttpServer httpserver = provider.createHttpServer(new InetSocketAddress(port), 100);
