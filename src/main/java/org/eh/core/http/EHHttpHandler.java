@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eh.core.common.Constants;
@@ -37,8 +34,7 @@ public class EHHttpHandler implements HttpHandler {
 
 			// 根据后缀判断是否是静态资源
 			String suffix = path.substring(path.lastIndexOf("."), path.length());
-			List<String> suffixs =new ArrayList<>(Arrays.asList(".css",".js",".jpg",".png",".gif"));
-			if (suffixs.contains(suffix)) {
+			if (Constants.STATIC_SUFFIXS.contains(suffix)) {
 				byte[] bytes = FileUtil.readFileByBytes(this.getClass().getResource("/").getPath()
 						+ "static" + path);
 				responseStaticToClient(httpExchange, 200, bytes);
