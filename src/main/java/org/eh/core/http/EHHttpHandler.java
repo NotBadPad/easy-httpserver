@@ -130,6 +130,10 @@ public class EHHttpHandler implements HttpHandler {
 		httpExchange.close();
 	}
 
+	/**
+	 * 调用对应Controller处理业务
+	 */
+	@SuppressWarnings("rawtypes")
 	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		String path = httpExchange.getRequestURI().getPath();
@@ -144,11 +148,17 @@ public class EHHttpHandler implements HttpHandler {
 		return controller.process(analysisParms(httpExchange));
 	}
 
+	/**
+	 * 调用ViewHandler渲染视图
+	 */
 	private String invokViewHandler(ResultInfo resultInfo) {
 		ViewHandler viewHandler = new ViewHandler();
 		return viewHandler.processView(resultInfo);
 	}
 
+	/**
+	 * 解析参数
+	 */
 	private Map<String, Object> analysisParms(HttpExchange httpExchange) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		URI requestedUri = httpExchange.getRequestURI();

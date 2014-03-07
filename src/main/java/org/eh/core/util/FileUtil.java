@@ -23,7 +23,6 @@ public class FileUtil {
 
 	@SuppressWarnings("resource")
 	public static String readFile(String path) {
-		System.out.println(path);
 		if (!isExist(path)) {
 			return "";
 		}
@@ -48,7 +47,6 @@ public class FileUtil {
 	}
 
 	public static byte[] readFileByBytes(String path) {
-		System.out.println(path);
 		if (!isExist(path)) {
 			return "".getBytes();
 		}
