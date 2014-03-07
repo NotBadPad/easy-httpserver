@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eh.core.util.PropertyUtil;
 
 /**
@@ -14,6 +16,8 @@ import org.eh.core.util.PropertyUtil;
  * @date 2014-3-3
  */
 public class Constants {
+	private static final Log log = LogFactory.getLog(Constants.class);
+
 	/* 配置信息 */
 	public static String PACKAGE_PREFIX = "org.eh.web."; // 包前缀
 	public static String VIEW_BASE_PATH = "org/eh/web/view/"; // view包路径
@@ -33,7 +37,7 @@ public class Constants {
 		try {
 			map = PropertyUtil.analysisProperties(path);
 		} catch (Exception e) {
-			System.out.println("配置文件不存在！");
+			log.error("配置文件不存在！", e);
 		}
 
 		for (String key : map.keySet()) {

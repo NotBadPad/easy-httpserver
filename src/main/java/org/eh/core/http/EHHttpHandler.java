@@ -7,6 +7,8 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.FileUtil;
@@ -26,11 +28,12 @@ import com.sun.net.httpserver.HttpHandler;
  */
 @SuppressWarnings("restriction")
 public class EHHttpHandler implements HttpHandler {
+	private final Log log = LogFactory.getLog(EHHttpHandler.class);
 
 	public void handle(HttpExchange httpExchange) throws IOException {
 		try {
 			String path = httpExchange.getRequestURI().getPath();
-			System.out.println("Request path:" + path);
+			log.info("Receive a request,Request path:" + path);
 
 			// 根据后缀判断是否是静态资源
 			String suffix = path.substring(path.lastIndexOf("."), path.length());
@@ -67,7 +70,7 @@ public class EHHttpHandler implements HttpHandler {
 
 		} catch (Exception e) {
 			httpExchange.close();
-			e.printStackTrace();
+			log.error("响应请求失败：", e);
 		}
 	}
 

@@ -23,6 +23,7 @@ public class ViewHandler {
 			return "";
 		}
 
+		// 替换模板中的变量，替换符格式：${XXX}
 		for (String key : resultInfo.getResultMap().keySet()) {
 			String temp = "";
 			if (null != resultInfo.getResultMap().get(key)) {
@@ -38,7 +39,6 @@ public class ViewHandler {
 		String path = this.getClass().getResource("/").getPath()
 				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
 				+ viewPath + ".page";
-		System.out.println(path);
 		return path;
 	}
 }

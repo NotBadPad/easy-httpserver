@@ -3,6 +3,8 @@ package org.eh.core.http;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eh.core.annotation.AnnocationHandler;
 import org.eh.core.common.Constants;
 
@@ -15,11 +17,12 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
  * @date 2014-3-3
  */
 public class EHServer {
+	private final Log log = LogFactory.getLog(EHServer.class);
 
 	@SuppressWarnings("restriction")
 	public void startServer() throws IOException {
-		System.out.println("Starting EHServer......");
-		System.out.println("Loading configuration......");
+		log.info("Starting EHServer......");
+		log.info("Loading configuration......");
 
 		// 加载配置文件
 		String propPath = this.getClass().getResource("/").getPath() + Constants.PROPERTIES_NAME;
@@ -32,14 +35,13 @@ public class EHServer {
 				annocationHandler.paserControllerAnnocation(Constants.OTHER_CONFIG_INFO.get(
 						Constants.PROPERTIES_CONTROLLER_PACKAGE).toString());
 			} catch (Exception e) {
-				System.err.println("加载controller配置出错！");
-				e.printStackTrace();
+				log.error("加载controller配置出错！", e);
 				return;
 			}
 		}
 
 		for (String key : Constants.UrlClassMap.keySet()) {
-			System.out.println("Add url-class:" + key + "  " + Constants.UrlClassMap.get(key));
+			log.info("Add url-class:" + key + "  " + Constants.UrlClassMap.get(key));
 		}
 
 		int port = 8899;
@@ -49,7 +51,7 @@ public class EHServer {
 			try {
 				port = Integer.parseInt(portValue);
 			} catch (Exception e) {
-				System.err.println("端口错误！");
+				log.error("端口错误！", e);
 				return;
 			}
 			
@@ -61,7 +63,7 @@ public class EHServer {
 		httpserver.createContext("/", new EHHttpHandler());
 		httpserver.setExecutor(null);
 		httpserver.start();
-		System.out.println("EHServer has started");
+		log.info("EHServer has started");
 	}
 
 	public static void main(String[] args) throws IOException {

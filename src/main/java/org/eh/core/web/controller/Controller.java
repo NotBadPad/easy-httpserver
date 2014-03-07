@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eh.core.model.ResultInfo;
 
 /**
- *
+ * Controllrt接口
  * @author guojing
  * @date 2014-3-3
  */

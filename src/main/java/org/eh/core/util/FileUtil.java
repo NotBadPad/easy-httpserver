@@ -5,12 +5,16 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author guojing
  * @date 2014-3-3
  */
 public class FileUtil {
+	private static final Log log = LogFactory.getLog(FileUtil.class);
 	
 	public static boolean isExist(String path) {
 		File file = new File(path);
@@ -38,7 +42,7 @@ public class FileUtil {
 			c.close();
 			fis.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("读取模板文件失败：", e);
 		}
 		return sb.toString();
 	}
@@ -61,7 +65,7 @@ public class FileUtil {
 			c.close();
 			fis.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("读取资源文件失败：", e);
 		}
 		return bytes;
 	}
