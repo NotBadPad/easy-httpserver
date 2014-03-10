@@ -29,6 +29,7 @@ public class Constants {
 
 	/* 常量值 */
 	public static String PROPERTIES_NAME = "web.properties"; // 配置文件名
+	public static String PROPERTIES_VELOCITY_NAME = "velocity.properties"; // 配置文件名
 	public static String PROPERTIES_CONTROLLER_PACKAGE = "controller.package"; // controller配置文件中属性名
 	public static String PROPERTIES_HPPTSERVER_PORT = "httpserver.port"; // 服务端口名
 

@@ -1,9 +1,12 @@
 package org.eh.core.web.view;
 
+import java.io.IOException;
+
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.FileUtil;
 import org.eh.core.util.StringUtil;
+import org.eh.core.util.VelocityUtil;
 
 /**
  * 处理页面信息
@@ -12,6 +15,10 @@ import org.eh.core.util.StringUtil;
  */
 public class ViewHandler {
 
+	/**
+	 * 处理View模板，只提供建单变量(格式${XXX})替换
+	 * @return
+	 */
 	public String processView(ResultInfo resultInfo) {
 		// 获取路径
 		String path = analysisViewPath(resultInfo.getView());
@@ -19,6 +26,7 @@ public class ViewHandler {
 		if (FileUtil.isExist(path)) {
 			content = FileUtil.readFile(path);
 		}
+
 		if (StringUtil.isEmpty(content)) {
 			return "";
 		}
@@ -35,10 +43,33 @@ public class ViewHandler {
 		return content;
 	}
 
+	/**
+	 * 处理Velocity模板
+	 * @param resultInfo
+	 * @return
+	 * @throws IOException
+	 */
+	public String processVelocityView(ResultInfo resultInfo) throws IOException {
+		// 获取路径
+		String path = analysisVelocityViewPath(resultInfo.getView());
+		String content = VelocityUtil.mergeTemplate(path, resultInfo.getResultMap());
+		
+		if (StringUtil.isEmpty(content)) {
+			return "";
+		}
+
+		return content;
+	}
+
 	private String analysisViewPath(String viewPath) {
 		String path = this.getClass().getResource("/").getPath()
 				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
 				+ viewPath + ".page";
+		return path;
+	}
+
+	private String analysisVelocityViewPath(String viewPath) {
+		String path = Constants.VIEW_BASE_PATH + viewPath + ".vm";
 		return path;
 	}
 }

@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.app.Velocity;
 import org.eh.core.annotation.AnnocationHandler;
 import org.eh.core.common.Constants;
 
@@ -39,6 +40,10 @@ public class EHServer {
 				return;
 			}
 		}
+
+		// 初始化Velocity模板
+		Velocity.init(this.getClass().getResource("/").getPath()
+				+ Constants.PROPERTIES_VELOCITY_NAME);
 
 		for (String key : Constants.UrlClassMap.keySet()) {
 			log.info("Add url-class:" + key + "  " + Constants.UrlClassMap.get(key));

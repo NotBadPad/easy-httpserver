@@ -2,6 +2,7 @@ package org.eh.core.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ import com.sun.net.httpserver.HttpHandler;
  * @author guojing
  * @date 2014-3-3
  */
-@SuppressWarnings("restriction")
 public class EHHttpHandler implements HttpHandler {
 	private final Log log = LogFactory.getLog(EHHttpHandler.class);
 
@@ -60,7 +60,7 @@ public class EHHttpHandler implements HttpHandler {
 				String redirectUrl = viewPath.replace(ReturnType.redirect.name() + ":", "");
 				responseToClient(httpExchange, 302, redirectUrl);
 				return;
-			} else if (viewPath.startsWith(ReturnType.json.name())) {
+			} else if (viewPath.startsWith(ReturnType.json.name())) { // 返回json数据
 				String jsonContent = viewPath.replace(ReturnType.json.name() + ":", "");
 				responseToClient(httpExchange, 200, jsonContent);
 				return;
@@ -140,7 +140,7 @@ public class EHHttpHandler implements HttpHandler {
 	 */
 	@SuppressWarnings("rawtypes")
 	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
+			InstantiationException, IllegalAccessException, UnsupportedEncodingException {
 		String path = httpExchange.getRequestURI().getPath();
 		
 		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf(".")));
@@ -156,15 +156,17 @@ public class EHHttpHandler implements HttpHandler {
 	/**
 	 * 调用ViewHandler渲染视图
 	 */
-	private String invokViewHandler(ResultInfo resultInfo) {
+	private String invokViewHandler(ResultInfo resultInfo) throws IOException {
 		ViewHandler viewHandler = new ViewHandler();
-		return viewHandler.processView(resultInfo);
+		// return viewHandler.processView(resultInfo);
+		return viewHandler.processVelocityView(resultInfo);
 	}
 
 	/**
 	 * 解析参数
 	 */
-	private Map<String, Object> analysisParms(HttpExchange httpExchange) {
+	private Map<String, Object> analysisParms(HttpExchange httpExchange)
+			throws UnsupportedEncodingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		URI requestedUri = httpExchange.getRequestURI();
 		String queryGet = requestedUri.getRawQuery();
@@ -179,7 +181,7 @@ public class EHHttpHandler implements HttpHandler {
 
 		for (String kv : query.split("&")) {
 			String[] temp = kv.split("=");
-			map.put(temp[0], URLDecoder.decode(temp[1]));
+			map.put(temp[0], URLDecoder.decode(temp[1], "utf-8"));
 		}
 		return map;
 	}
