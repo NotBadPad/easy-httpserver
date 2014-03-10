@@ -20,7 +20,6 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
 public class EHServer {
 	private final Log log = LogFactory.getLog(EHServer.class);
 
-	@SuppressWarnings("restriction")
 	public void startServer() throws IOException {
 		log.info("Starting EHServer......");
 		log.info("Loading configuration......");

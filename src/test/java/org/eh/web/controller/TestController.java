@@ -13,7 +13,6 @@ import org.eh.core.web.controller.Controller;
  */
 public class TestController implements Controller {
 
-	@SuppressWarnings("unchecked")
 	public ResultInfo process(Map<String, Object> parms) {
 		ResultInfo resultInfo = new ResultInfo();
 		Map<String, Object> map = new HashMap<String, Object>();

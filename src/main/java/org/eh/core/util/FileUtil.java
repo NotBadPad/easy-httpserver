@@ -21,7 +21,6 @@ public class FileUtil {
 		return file.exists();
 	}
 
-	@SuppressWarnings("resource")
 	public static String readFile(String path) {
 		if (!isExist(path)) {
 			return "";
