@@ -152,11 +152,16 @@ public class EHHttpHandler implements HttpHandler {
 		Controller controller = (Controller) controllerClass.newInstance();
 
 		Map<String, Object> map = null;
+		
 		// 判断表单类型，若是multipart/form-data，则是文件上传；否则做普通处理
 		Headers headers = httpExchange.getRequestHeaders();
 		// 获取ContentType
-		String contentType = headers.get("Content-type").toString().replace("[", "")
-				.replace("]", "");
+		String contentType = "";
+		if(null != headers.get("Content-type")){
+			contentType = headers.get("Content-type").toString().replace("[", "")
+					.replace("]", "");
+		}
+		
 		if (contentType.indexOf("multipart/form-data") != -1) {
 			// 获取content长度
 			int length = Integer.parseInt(headers.get("Content-length").toString().replace("[", "")
