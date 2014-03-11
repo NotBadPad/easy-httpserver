@@ -1,5 +1,10 @@
 package org.eh.core.model;
 
+/**
+ * 上传文件信息
+ * @author guojing
+ * @date 2014-3-3
+ */
 public class FileInfo {
 	
 	private String filename;	//文件名

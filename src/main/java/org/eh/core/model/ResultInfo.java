@@ -3,7 +3,7 @@ package org.eh.core.model;
 import java.util.Map;
 
 /**
- *
+ * Controller处理结果
  * @author guojing
  * @date 2014-3-3
  */

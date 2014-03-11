@@ -7,7 +7,7 @@ import java.util.List;
 import org.eh.core.common.Constants;
 
 /**
- *
+ * 注解处理类
  * @author guojing
  * @date 2014-3-5
  */
