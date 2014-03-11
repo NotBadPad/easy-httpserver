@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eh.core.util.PropertyUtil;
 
 /**
- *
+ * 
  * @author guojing
  * @date 2014-3-3
  */
@@ -25,7 +25,7 @@ public class Constants {
 	public static Map<String, String> UrlClassMap = new HashMap<String, String>(); // url与class映射
 	public static Map<String, String> OTHER_CONFIG_INFO = new HashMap<String, String>(); // 其他配置信息
 	public static List<String> STATIC_SUFFIXS = new ArrayList<String>(Arrays.asList(".css", ".js",
-			".jpg", ".png", ".gif")); // 静态文件后缀
+			".jpg", ".png", ".gif", ".html")); // 静态文件后缀
 
 	/* 常量值 */
 	public static String PROPERTIES_NAME = "web.properties"; // 配置文件名

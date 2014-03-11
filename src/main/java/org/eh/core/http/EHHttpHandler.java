@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eh.core.common.Constants;
 import org.eh.core.common.ReturnType;
 import org.eh.core.model.ResultInfo;
+import org.eh.core.util.FileUploadContentAnalysis;
 import org.eh.core.util.FileUtil;
 import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
@@ -140,7 +141,7 @@ public class EHHttpHandler implements HttpHandler {
 	 */
 	@SuppressWarnings("rawtypes")
 	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException, UnsupportedEncodingException {
+			InstantiationException, IllegalAccessException, IOException {
 		String path = httpExchange.getRequestURI().getPath();
 		
 		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf(".")));
@@ -150,7 +151,23 @@ public class EHHttpHandler implements HttpHandler {
 		Class controllerClass = Class.forName(classPath);
 		Controller controller = (Controller) controllerClass.newInstance();
 
-		return controller.process(analysisParms(httpExchange));
+		Map<String, Object> map = null;
+		// 判断表单类型，若是multipart/form-data，则是文件上传；否则做普通处理
+		Headers headers = httpExchange.getRequestHeaders();
+		// 获取ContentType
+		String contentType = headers.get("Content-type").toString().replace("[", "")
+				.replace("]", "");
+		if (contentType.indexOf("multipart/form-data") != -1) {
+			// 获取content长度
+			int length = Integer.parseInt(headers.get("Content-length").toString().replace("[", "")
+					.replace("]", ""));
+			map = FileUploadContentAnalysis.parse(httpExchange.getRequestBody(), contentType,
+					length);
+		} else {
+			map = analysisParms(httpExchange);
+		}
+
+		return controller.process(map);
 	}
 
 	/**
@@ -168,15 +185,20 @@ public class EHHttpHandler implements HttpHandler {
 	private Map<String, Object> analysisParms(HttpExchange httpExchange)
 			throws UnsupportedEncodingException {
 		Map<String, Object> map = new HashMap<String, Object>();
+
 		URI requestedUri = httpExchange.getRequestURI();
 		String queryGet = requestedUri.getRawQuery();
 		String queryPost = IOUtil.getRequestContent(httpExchange.getRequestBody());
+		System.out.println(queryPost);
 		String query = "";
 		if (!StringUtil.isEmpty(queryGet)) {
 			query = queryGet;
 		}
 		if (!StringUtil.isEmpty(queryPost)) {
-			query = query + "&" + queryPost;
+			query = StringUtil.isEmpty(query) ? queryPost : (query + "&" + queryPost);
+		}
+		if (StringUtil.isEmpty(query)) {
+			return map;
 		}
 
 		for (String kv : query.split("&")) {
