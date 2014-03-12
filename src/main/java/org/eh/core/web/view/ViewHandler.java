@@ -69,7 +69,7 @@ public class ViewHandler {
 	}
 
 	private String analysisVelocityViewPath(String viewPath) {
-		String path = Constants.VIEW_BASE_PATH + viewPath + ".vm";
+		String path = Constants.VIEW_BASE_PATH + "/" + viewPath + ".vm";
 		return path;
 	}
 }
