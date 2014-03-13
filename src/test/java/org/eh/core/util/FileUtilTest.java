@@ -13,7 +13,7 @@ public class FileUtilTest {
 	public void TestRead() {
 		String path = this.getClass().getResource("/").getPath()
 				+ "org/eh/web/view/test/myinfo.page";
-		String content = FileUtil.readFile(path);
+		String content = IOUtil.readFile(path);
 		System.out.println(content);
 	}
 

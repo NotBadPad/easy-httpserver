@@ -14,7 +14,6 @@ import org.eh.core.common.Constants;
 import org.eh.core.common.ReturnType;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.FileUploadContentAnalysis;
-import org.eh.core.util.FileUtil;
 import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
 import org.eh.core.web.controller.Controller;
@@ -40,7 +39,7 @@ public class EHHttpHandler implements HttpHandler {
 			// 根据后缀判断是否是静态资源
 			String suffix = path.substring(path.lastIndexOf("."), path.length());
 			if (Constants.STATIC_SUFFIXS.contains(suffix)) {
-				byte[] bytes = FileUtil.readFileByBytes(this.getClass().getResource("/").getPath()
+				byte[] bytes = IOUtil.readFileByBytes(this.getClass().getResource("/").getPath()
 						+ "static" + path);
 				responseStaticToClient(httpExchange, 200, bytes);
 				return;

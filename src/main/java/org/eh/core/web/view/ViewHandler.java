@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.eh.core.common.Constants;
 import org.eh.core.model.ResultInfo;
-import org.eh.core.util.FileUtil;
+import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
 import org.eh.core.util.VelocityUtil;
 
@@ -23,8 +23,8 @@ public class ViewHandler {
 		// 获取路径
 		String path = analysisViewPath(resultInfo.getView());
 		String content = "";
-		if (FileUtil.isExist(path)) {
-			content = FileUtil.readFile(path);
+		if (IOUtil.isExist(path)) {
+			content = IOUtil.readFile(path);
 		}
 
 		if (StringUtil.isEmpty(content)) {
