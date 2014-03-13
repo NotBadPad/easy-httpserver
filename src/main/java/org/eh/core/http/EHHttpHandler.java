@@ -3,6 +3,8 @@ package org.eh.core.http;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eh.core.annotation.AnnocationHandler;
 import org.eh.core.common.Constants;
 import org.eh.core.common.ReturnType;
 import org.eh.core.model.ResultInfo;
@@ -140,18 +143,23 @@ public class EHHttpHandler implements HttpHandler {
 	 */
 	@SuppressWarnings("rawtypes")
 	private ResultInfo invokController(HttpExchange httpExchange) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException, IOException {
+			InstantiationException, IllegalAccessException, IOException, NoSuchMethodException,
+			SecurityException, IllegalArgumentException, InvocationTargetException {
 		String path = httpExchange.getRequestURI().getPath();
 		
-		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf(".")));
+		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf("/") + 1));
 		if (classPath == null || classPath.length() == 0) {
 			return null;
 		}
 		Class controllerClass = Class.forName(classPath);
 		Controller controller = (Controller) controllerClass.newInstance();
 
-		Map<String, Object> map = null;
+		String methodName = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
+		//通过反射获取对应方法
+		AnnocationHandler annocationHandler = new AnnocationHandler();
+		Method method = annocationHandler.getMethod(controllerClass, methodName);
 		
+		Map<String, Object> map = null; // 参数
 		// 判断表单类型，若是multipart/form-data，则是文件上传；否则做普通处理
 		Headers headers = httpExchange.getRequestHeaders();
 		// 获取ContentType
@@ -171,7 +179,7 @@ public class EHHttpHandler implements HttpHandler {
 			map = analysisParms(httpExchange);
 		}
 
-		return controller.process(map);
+		return (ResultInfo) method.invoke(controller, new Object[] { map });
 	}
 
 	/**
@@ -193,7 +201,6 @@ public class EHHttpHandler implements HttpHandler {
 		URI requestedUri = httpExchange.getRequestURI();
 		String queryGet = requestedUri.getRawQuery();
 		String queryPost = IOUtil.getRequestContent(httpExchange.getRequestBody());
-		System.out.println(queryPost);
 		String query = "";
 		if (!StringUtil.isEmpty(queryGet)) {
 			query = queryGet;
