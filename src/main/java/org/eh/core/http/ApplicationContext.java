@@ -3,6 +3,8 @@ package org.eh.core.http;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.eh.core.util.StringUtil;
 
@@ -17,7 +19,7 @@ public class ApplicationContext {
 
 	private Map<String, Object> appMap = new HashMap<String, Object>(); // ApplicationContext全局数据
 
-	private Map<String, HttpSession> sessionMap = new HashMap<String, HttpSession>(); // session数据
+	private ConcurrentMap<String, HttpSession> sessionMap = new ConcurrentHashMap<String, HttpSession>(); // session数据
 
 	private ApplicationContext(){
 		
@@ -103,7 +105,7 @@ public class ApplicationContext {
 	/**
 	 * 获取所有session
 	 */
-	public Map<String, HttpSession> getAllSession() {
+	public ConcurrentMap<String, HttpSession> getAllSession() {
 		return ApplicationContextHolder.instance.sessionMap;
 	}
 }
