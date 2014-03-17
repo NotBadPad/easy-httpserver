@@ -6,5 +6,5 @@ package org.eh.core.common;
  * @date 2014-3-7
  */
 public enum ReturnType {
-	redirect, json
+	velocity, redirect, json
 }

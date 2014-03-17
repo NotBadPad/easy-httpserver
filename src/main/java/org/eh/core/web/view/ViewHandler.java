@@ -3,6 +3,7 @@ package org.eh.core.web.view;
 import java.io.IOException;
 
 import org.eh.core.common.Constants;
+import org.eh.core.common.ReturnType;
 import org.eh.core.model.ResultInfo;
 import org.eh.core.util.IOUtil;
 import org.eh.core.util.StringUtil;
@@ -50,6 +51,10 @@ public class ViewHandler {
 	 * @throws IOException
 	 */
 	public String processVelocityView(ResultInfo resultInfo) throws IOException {
+		if (StringUtil.isEmpty(resultInfo.getView())) {
+			return "";
+		}
+
 		// 获取路径
 		String path = analysisVelocityViewPath(resultInfo.getView());
 		String content = VelocityUtil.mergeTemplate(path, resultInfo.getResultMap());
@@ -69,7 +74,8 @@ public class ViewHandler {
 	}
 
 	private String analysisVelocityViewPath(String viewPath) {
-		String path = Constants.VIEW_BASE_PATH + "/" + viewPath + ".vm";
+		String path = Constants.VIEW_BASE_PATH + "/"
+				+ viewPath.replace(ReturnType.velocity.name() + ":", "") + ".vm";
 		return path;
 	}
 }

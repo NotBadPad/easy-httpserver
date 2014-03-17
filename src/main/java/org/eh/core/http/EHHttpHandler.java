@@ -39,6 +39,17 @@ public class EHHttpHandler implements HttpHandler {
 			String path = httpExchange.getRequestURI().getPath();
 			log.info("Receive a request,Request path:" + path);
 
+			// 设置sessionId
+			String sessionId = ApplicationContext.getApplicationContext()
+					.getSessionId(httpExchange);
+			if (StringUtil.isEmpty(sessionId)) {
+				sessionId = StringUtil.creatSession();
+				ApplicationContext.getApplicationContext().addSession(sessionId);
+			}
+
+			httpExchange.getResponseHeaders().set("Set-Cookie",
+					"EH_SESSION=" + sessionId + "; path=/");
+
 			// 根据后缀判断是否是静态资源
 			String suffix = path.substring(path.lastIndexOf("."), path.length());
 			if (Constants.STATIC_SUFFIXS.contains(suffix)) {
@@ -58,8 +69,7 @@ public class EHHttpHandler implements HttpHandler {
 			}
 
 			String viewPath = resultInfo.getView();
-			// 重定向
-			if (viewPath.startsWith(ReturnType.redirect.name())) {
+			if (viewPath.startsWith(ReturnType.redirect.name())) {// redirect跳转
 				String redirectUrl = viewPath.replace(ReturnType.redirect.name() + ":", "");
 				responseToClient(httpExchange, 302, redirectUrl);
 				return;
@@ -67,12 +77,15 @@ public class EHHttpHandler implements HttpHandler {
 				String jsonContent = viewPath.replace(ReturnType.json.name() + ":", "");
 				responseToClient(httpExchange, 200, jsonContent);
 				return;
-			} else { // 解析对应view并返回
+			} else if (viewPath.startsWith(ReturnType.velocity.name())) { // 解析对应view并返回
 				String content = invokViewHandler(resultInfo);
 				if (content == null) {
 					content = "";
 				}
 				responseToClient(httpExchange, 200, content);
+				return;
+			} else {
+				responseToClient(httpExchange, 200, resultInfo.getView());
 				return;
 			}
 
@@ -91,6 +104,7 @@ public class EHHttpHandler implements HttpHandler {
 	 */
 	private void responseToClient(HttpExchange httpExchange, Integer code, String msg)
 			throws IOException {
+
 		switch (code) {
 		case 200: { // 成功
 			byte[] bytes = msg.getBytes();
@@ -178,6 +192,11 @@ public class EHHttpHandler implements HttpHandler {
 		} else {
 			map = analysisParms(httpExchange);
 		}
+
+		// 设置session
+		HttpSession httpSession = ApplicationContext.getApplicationContext().getSession(
+				httpExchange);
+		map.put("session", httpSession);
 
 		return (ResultInfo) method.invoke(controller, new Object[] { map });
 	}
