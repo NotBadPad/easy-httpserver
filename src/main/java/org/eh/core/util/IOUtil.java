@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * IO、文件处理
  * @author guojing
  * @date 2014-3-4
  */

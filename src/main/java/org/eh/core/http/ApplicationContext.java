@@ -20,6 +20,9 @@ public class ApplicationContext {
 
 	private Map<String, Object> appMap = new HashMap<String, Object>(); // ApplicationContext全局数据
 
+	/**
+	 * 这里自己也有点搞不清sessionMap是不是有必要考虑线程安全
+	 */
 	private ConcurrentMap<String, HttpSession> sessionMap = new ConcurrentHashMap<String, HttpSession>(); // session数据
 
 	private ApplicationContext(){

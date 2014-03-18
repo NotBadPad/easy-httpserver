@@ -17,9 +17,10 @@ import org.eh.core.util.VelocityUtil;
 public class ViewHandler {
 
 	/**
-	 * 处理View模板，只提供建单变量(格式${XXX})替换
+	 * 处理View模板,只提供建单变量(格式${XXX})替换,已废弃
 	 * @return
 	 */
+	@Deprecated
 	public String processView(ResultInfo resultInfo) {
 		// 获取路径
 		String path = analysisViewPath(resultInfo.getView());
@@ -66,6 +67,12 @@ public class ViewHandler {
 		return content;
 	}
 
+	/**
+	 * 解析路径（根据Controller返回ResultInfo的view）,已废弃
+	 * @param viewPath
+	 * @return
+	 */
+	@Deprecated
 	private String analysisViewPath(String viewPath) {
 		String path = this.getClass().getResource("/").getPath()
 				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
@@ -73,6 +80,9 @@ public class ViewHandler {
 		return path;
 	}
 
+	/**
+	 * 解析velocity路径（根据Controller返回ResultInfo的view）
+	 */
 	private String analysisVelocityViewPath(String viewPath) {
 		String path = Constants.VIEW_BASE_PATH + "/"
 				+ viewPath.replace(ReturnType.velocity.name() + ":", "") + ".vm";

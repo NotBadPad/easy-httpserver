@@ -39,5 +39,7 @@ public class SessionCleanTask extends TimerTask {
 				it.remove();
 			}
 		}
+
+		log.info("清理session结束");
 	}
 }

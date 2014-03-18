@@ -11,7 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 配置文件工具类
  * @author guojing
  * @date 2014-3-4
  */

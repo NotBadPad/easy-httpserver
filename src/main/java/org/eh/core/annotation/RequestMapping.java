@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
+ * 方法映射注解
  * @author guojing
  * @date 2014-3-13
  */

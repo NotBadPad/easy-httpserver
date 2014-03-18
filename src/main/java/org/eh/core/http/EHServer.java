@@ -23,6 +23,9 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
 public class EHServer {
 	private final Log log = LogFactory.getLog(EHServer.class);
 
+	/**
+	 * 初始化信息，并启动server
+	 */
 	public void startServer() throws IOException {
 		log.info("Starting EHServer......");
 		log.info("Loading configuration......");
@@ -79,6 +82,9 @@ public class EHServer {
 		log.info("EHServer has started");
 	}
 
+	/**
+	 * 项目main
+	 */
 	public static void main(String[] args) throws IOException {
 		new EHServer().startServer();
 	}

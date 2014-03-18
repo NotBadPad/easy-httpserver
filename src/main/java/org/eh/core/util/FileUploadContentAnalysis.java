@@ -12,7 +12,7 @@ import org.eh.core.model.FileInfo;
 
 /**
  * 解析content获取上传文件表单信息
- * @author guojing
+ * @author 自己写的老有问题，一怒之下copy了一份。不过这个也有些问题，由于office不同版本的Content-Type格式不固定， 所以office文件上传生成的文件一般会少几个字节，以后有心情了再改吧
  * @date 2014-3-10
  */
 public class FileUploadContentAnalysis {
