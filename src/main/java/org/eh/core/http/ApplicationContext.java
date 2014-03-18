@@ -1,5 +1,6 @@
 package org.eh.core.http;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +59,7 @@ public class ApplicationContext {
 
 	public void addSession(String sessionId) {
 		HttpSession httpSession = new HttpSession();
+		httpSession.setLastVisitTime(new Date());
 		ApplicationContextHolder.instance.sessionMap.put(sessionId, httpSession);
 	}
 
@@ -107,5 +109,13 @@ public class ApplicationContext {
 	 */
 	public ConcurrentMap<String, HttpSession> getAllSession() {
 		return ApplicationContextHolder.instance.sessionMap;
+	}
+
+	/**
+	 * 设置session最后访问时间
+	 */
+	public void setSessionLastTime(String sessionId) {
+		HttpSession httpSession = ApplicationContextHolder.instance.sessionMap.get(sessionId);
+		httpSession.setLastVisitTime(new Date());
 	}
 }

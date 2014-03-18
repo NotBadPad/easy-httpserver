@@ -33,6 +33,7 @@ public class Constants {
 	public static String PROPERTIES_VELOCITY_NAME = "velocity.properties"; // 配置文件名
 	public static String PROPERTIES_CONTROLLER_PACKAGE = "controller.package"; // controller配置文件中属性名
 	public static String PROPERTIES_HPPTSERVER_PORT = "httpserver.port"; // 服务端口名
+	public static String SESSION_TIMEOUT = "session_timeout"; // 服务端口名
 
 	public static void loadFromProp(String path) {
 		Map<String, String> map = new HashMap<String, String>();

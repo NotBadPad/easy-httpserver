@@ -2,12 +2,15 @@ package org.eh.core.http;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Date;
+import java.util.Timer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.Velocity;
 import org.eh.core.annotation.AnnocationHandler;
 import org.eh.core.common.Constants;
+import org.eh.core.task.SessionCleanTask;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
@@ -58,9 +61,15 @@ public class EHServer {
 				log.error("端口错误！", e);
 				return;
 			}
-			
 		}
 		
+		//启动session过期清理定时器
+		Timer timer = new Timer();
+		SessionCleanTask sessionCleanTask = new SessionCleanTask();
+		int session_timeout = Integer.parseInt(Constants.OTHER_CONFIG_INFO
+				.get(Constants.SESSION_TIMEOUT));
+		timer.schedule(sessionCleanTask, new Date(), session_timeout * 60 * 2 * 1000);
+
 		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();
 		HttpServer httpserver = provider.createHttpServer(new InetSocketAddress(port), 100);
