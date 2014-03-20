@@ -47,10 +47,7 @@ public class FileUploadContentAnalysis {
 		DataInputStream in = new DataInputStream(ins);
 		// 将请求消息的实体送到b变量中
 		int totalBytes = totalLength;
-		String message = "";
 		if (totalBytes > MXA_SEGSIZE) {// 每批大于10m时
-			message = "Each batch of data can not be larger than " + MXA_SEGSIZE / (1000 * 1024)
-					+ "M";
 			return null;
 		}
 		byte[] b = new byte[totalBytes];
@@ -60,7 +57,6 @@ public class FileUploadContentAnalysis {
 		BufferedReader reqbuf = new BufferedReader(new StringReader(reqContent));
 
 		boolean flag = true;
-		int i = 0;
 		while (flag == true) {
 			String s = reqbuf.readLine();
 			if ((s == null) || (s.equals(lastboundary)))
@@ -70,7 +66,6 @@ public class FileUploadContentAnalysis {
 			case NONE:
 				if (s.startsWith(boundary)) {
 					state = DATAHEADER;
-					i += 1;
 				}
 				break;
 			case DATAHEADER:
