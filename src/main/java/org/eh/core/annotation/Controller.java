@@ -22,7 +22,7 @@ public @interface Controller {
 	public String name();
 
 	/**
-	 * 对应url请求路径，如htp://127.0.0.1/test/list.do 则对应 /test/list
+	 * 对应url请求路径，如htp://127.0.0.1/test/list.do 则对应 controller为：/test/，对应方法为：list
 	 */
 	public String url();
 }
