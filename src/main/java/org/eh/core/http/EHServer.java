@@ -47,6 +47,7 @@ public class EHServer {
 		}
 
 		// 初始化Velocity模板
+		log.info("Initializing velocity......");
 		Velocity.init(this.getClass().getResource("/").getPath()
 				+ Constants.PROPERTIES_VELOCITY_NAME);
 
@@ -57,6 +58,7 @@ public class EHServer {
 		int port = 8899;
 		//设置端口号
 		String portValue = Constants.OTHER_CONFIG_INFO.get(Constants.PROPERTIES_HPPTSERVER_PORT);
+		log.info("Set port:" + portValue);
 		if (portValue != null) {
 			try {
 				port = Integer.parseInt(portValue);
@@ -71,6 +73,8 @@ public class EHServer {
 		SessionCleanTask sessionCleanTask = new SessionCleanTask();
 		int session_timeout = Integer.parseInt(Constants.OTHER_CONFIG_INFO
 				.get(Constants.SESSION_TIMEOUT));
+		log.info("Initializing SessionCleanTask,the session_out_time is " + session_timeout * 2
+				+ " minute.");
 		timer.schedule(sessionCleanTask, new Date(), session_timeout * 60 * 2 * 1000);
 
 		// 启动服务器
