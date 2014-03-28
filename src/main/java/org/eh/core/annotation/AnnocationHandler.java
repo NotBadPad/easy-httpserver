@@ -37,7 +37,7 @@ public class AnnocationHandler {
 	 * @return
 	 */
 	public List<String> getPkgClass(String parkage) {
-		String path = this.getClass().getResource("/").getPath() + parkage.replace(".", "/") + "/";
+		String path = Constants.CLASS_PATH + parkage.replace(".", "/") + "/";
 		List<String> list = new ArrayList<String>();
 
 		File file = new File(path);

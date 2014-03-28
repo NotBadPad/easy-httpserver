@@ -1,5 +1,6 @@
 package org.eh.core.util;
 
+import org.eh.core.common.Constants;
 import org.eh.core.common.ReturnType;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class PropertyUtilTest {
 
 	@Test
 	public void testResd() {
-		PropertyUtil.analysisProperties(this.getClass().getResource("/").getPath()
+		PropertyUtil.analysisProperties(Constants.CLASS_PATH
 				+ "web.properties");
 	}
 

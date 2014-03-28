@@ -30,10 +30,13 @@ public class EHServer {
 		log.info("Starting EHServer......");
 		log.info("Loading configuration......");
 
+		//设置classes文件夹路径
+		Constants.CLASS_PATH = this.getClass().getResource("/").getPath().replace("bin", "classes");
 		// 加载配置文件
-		String propPath = this.getClass().getResource("/").getPath() + Constants.PROPERTIES_NAME;
+		String propPath = Constants.CLASS_PATH + Constants.PROPERTIES_NAME;
 		Constants.loadFromProp(propPath);
-
+		
+				
 		// 加载注解配置的controller
 		if (Constants.OTHER_CONFIG_INFO.get(Constants.PROPERTIES_CONTROLLER_PACKAGE) != null) {
 			AnnocationHandler annocationHandler = new AnnocationHandler();
@@ -48,7 +51,7 @@ public class EHServer {
 
 		// 初始化Velocity模板
 		log.info("Initializing velocity......");
-		Velocity.init(this.getClass().getResource("/").getPath()
+		Velocity.init(Constants.CLASS_PATH
 				+ Constants.PROPERTIES_VELOCITY_NAME);
 
 		for (String key : Constants.UrlClassMap.keySet()) {

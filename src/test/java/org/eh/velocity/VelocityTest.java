@@ -25,7 +25,7 @@ public class VelocityTest {
 		VelocityContext vc = new VelocityContext();
 		vc.put("name", "guojing");
 		StringWriter w = new StringWriter();
-		Velocity.mergeTemplate("org/eh/velocity/test.vm", "utf-8", vc, w);
+//		Velocity.mergeTemplate("org/eh/velocity/test.vm", "utf-8", vc, w);
 		System.out.println(w);
 	}
 }

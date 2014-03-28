@@ -53,7 +53,7 @@ public class EHHttpHandler implements HttpHandler {
 			// 根据后缀判断是否是静态资源
 			String suffix = path.substring(path.lastIndexOf("."), path.length());
 			if (Constants.STATIC_SUFFIXS.contains(suffix)) {
-				byte[] bytes = IOUtil.readFileByBytes(this.getClass().getResource("/").getPath()
+				byte[] bytes = IOUtil.readFileByBytes(Constants.CLASS_PATH
 						+ "static" + path);
 				responseStaticToClient(httpExchange, 200, bytes);
 				return;

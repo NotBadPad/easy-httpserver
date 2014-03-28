@@ -22,6 +22,7 @@ public class Constants {
 	public static String PACKAGE_PREFIX = "org.eh.web."; // 包前缀
 	public static String VIEW_BASE_PATH = ""; // 路径
 	public static String STATIC_RESOURCE_PATH = ""; // 静态文件路径
+	public static String CLASS_PATH = "";//classes文件夹路径
 
 	public static Map<String, String> UrlClassMap = new HashMap<String, String>(); // url与class映射
 	public static Map<String, String> OTHER_CONFIG_INFO = new HashMap<String, String>(); // 其他配置信息

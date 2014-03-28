@@ -74,7 +74,7 @@ public class ViewHandler {
 	 */
 	@Deprecated
 	private String analysisViewPath(String viewPath) {
-		String path = this.getClass().getResource("/").getPath()
+		String path = Constants.CLASS_PATH
 				+ (Constants.VIEW_BASE_PATH == null ? "/" : Constants.VIEW_BASE_PATH)
 				+ viewPath + ".page";
 		return path;
