@@ -78,7 +78,7 @@ public class EHServer {
 				.get(Constants.SESSION_TIMEOUT));
 		log.info("Initializing SessionCleanTask,the session_out_time is " + session_timeout * 2
 				+ " minute.");
-		timer.schedule(sessionCleanTask, new Date(), session_timeout * 60 * 2 * 1000);
+		timer.schedule(sessionCleanTask, new Date(), session_timeout * 30 * 1000);
 
 		// 启动服务器
 		HttpServerProvider provider = HttpServerProvider.provider();
