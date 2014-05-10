@@ -32,7 +32,18 @@ public class EHHttpHandler implements HttpHandler {
 		try {
 			String path = httpExchange.getRequestURI().getPath();
 			log.info("Receive a request,Request path:" + path);
-
+			
+			// 设置sessionId
+			String sessionId = ApplicationContext.getApplicationContext()
+					.getSessionId(httpExchange);
+			if (StringUtil.isEmpty(sessionId)) {
+				sessionId = StringUtil.creatSession();
+				ApplicationContext.getApplicationContext().addSession(sessionId);
+			}
+			
+			httpExchange.getResponseHeaders().set("Set-Cookie",
+					"EH_SESSION=" + sessionId + "; path=/");
+			
 			// 根据后缀判断是否是静态资源
 			String suffix = path
 					.substring(path.lastIndexOf("."), path.length());
@@ -42,7 +53,7 @@ public class EHHttpHandler implements HttpHandler {
 				responseStaticToClient(httpExchange, 200, bytes);
 				return;
 			}
-
+			
 			// 调用对应处理程序controller
 			ResultInfo resultInfo = invokController(httpExchange);
 
@@ -135,8 +146,14 @@ public class EHHttpHandler implements HttpHandler {
 	private ResultInfo invokController(HttpExchange httpExchange) throws UnsupportedEncodingException {
 		// 获取参数
 		Map<String, Object> map = analysisParms(httpExchange);
-
 		IndexController controller = new IndexController();
+		
+		// 设置session
+		HttpSession httpSession = ApplicationContext.getApplicationContext().getSession(
+				httpExchange);
+		log.info(httpSession);
+		map.put("session", httpSession);
+		
 		return controller.process(map);
 	}
 

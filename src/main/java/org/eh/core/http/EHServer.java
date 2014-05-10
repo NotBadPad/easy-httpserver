@@ -2,10 +2,13 @@ package org.eh.core.http;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Date;
+import java.util.Timer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eh.core.common.Constants;
+import org.eh.core.task.SessionCleanTask;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
@@ -28,6 +31,13 @@ public class EHServer {
 		Constants.CLASS_PATH = this.getClass().getResource("/").getPath();
 		Constants.VIEW_BASE_PATH = "page";
 		Constants.STATIC_RESOURCE_PATH = "static";
+		
+		//启动session过期清理定时器
+		Timer timer = new Timer();
+		SessionCleanTask sessionCleanTask = new SessionCleanTask();
+		log.info("Initializing SessionCleanTask,the session_out_time is " + Constants.SESSION_TIMEOUT * 2
+				+ " minute.");
+		timer.schedule(sessionCleanTask, new Date(), Constants.SESSION_TIMEOUT * 60 * 2 * 1000);
 		
 		//设置端口号
 		int port = 8899;

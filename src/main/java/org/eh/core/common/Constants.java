@@ -17,4 +17,7 @@ public class Constants {
 	public static String STATIC_RESOURCE_PATH = ""; // 静态文件路径
 	public static List<String> STATIC_SUFFIXS = new ArrayList<String>(Arrays.asList(".css", ".js",
 			".jpg", ".png", ".gif", ".html")); // 静态文件后缀
+	
+	/* session */
+	public static Integer SESSION_TIMEOUT = 10; //session
 }
