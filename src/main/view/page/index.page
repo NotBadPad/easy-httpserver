@@ -1,0 +1,12 @@
+<html>
+<head>
+	<script type="text/javascript" src="/js/test.js"></script>
+</head>
+<body>
+	<h1>Hello,${name}</h1>
+	<img src="/pic/tx.jpg" title="tx" />
+	<script type="text/javascript">
+		hello();
+	</script>
+</body
+<html>
