@@ -147,26 +147,29 @@ public class EHHttpHandler implements HttpHandler {
 	 * 调用对应Controller处理业务
 	 */
 	private ResultInfo invokController(HttpExchange httpExchange) throws UnsupportedEncodingException, InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-	String path = httpExchange.getRequestURI().getPath();
-		
-		String classPath = Constants.UrlClassMap.get(path.substring(0, path.lastIndexOf("/") + 1));
+		String path = httpExchange.getRequestURI().getPath();
+
+		String classPath = Constants.UrlClassMap.get(path.substring(0,
+				path.lastIndexOf("/") + 1));
 		if (classPath == null || classPath.length() == 0) {
 			return null;
 		}
 		Class controllerClass = Class.forName(classPath);
 		Controller controller = (Controller) controllerClass.newInstance();
 
-		String methodName = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
-		//通过反射获取对应方法
+		String methodName = path.substring(path.lastIndexOf("/") + 1,
+				path.lastIndexOf("."));
+		// 通过反射获取对应方法
 		AnnocationHandler annocationHandler = new AnnocationHandler();
-		Method method = annocationHandler.getMethod(controllerClass, methodName);
-		
+		Method method = annocationHandler
+				.getMethod(controllerClass, methodName);
+
 		Map<String, Object> map = null; // 参数
 		map = analysisParms(httpExchange);
 
 		// 设置session
-		HttpSession httpSession = ApplicationContext.getApplicationContext().getSession(
-				httpExchange);
+		HttpSession httpSession = ApplicationContext.getApplicationContext()
+				.getSession(httpExchange);
 		map.put("session", httpSession);
 
 		return (ResultInfo) method.invoke(controller, new Object[] { map });
